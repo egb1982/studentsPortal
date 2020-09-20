@@ -1,0 +1,73 @@
+<h1>STUDENTS PORTAL REGISTRATION</h1>
+<div class="row justify-content-md-center">
+    <div class="col-md-6">
+        <div class="card mt-5">
+            <div class="card-header">Register</div>
+            <div class="card-body">
+                <form #form="ngForm" (submit)="submitStudentId(form)" *ngIf="!studentInfo">
+                    <div class="row">
+                        <div class="col-md-12"><div class="alert alert-info my-3">Introduce your Student Id which has been sent to your e-mail address.</div></div>
+                        <div class="col-md-3 text-right">
+                            <label for="">Student Id</label>
+                        </div>
+                        <div class="col-md-9 input-group">
+                            <input [(ngModel)]="studentId" name="studentId" type="number" maxlength="6" minlength="6" required class="form-control"/>
+                            <span class="input-group-append">
+                                <button class="btn btn-success" type="submit">Send</button>
+                            </span>
+                        </div>
+                    </div>
+                </form>    
+                <form #form="ngForm" (submit)="registerUser(form)" *ngIf="studentInfo">
+                    <input type="hidden" name="studentId" [(ngModel)]="studentId">
+                    <div class="alert alert-success">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="mr-2">Student ID :</label><strong>{{studentId}}</strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="mr-2">Name :</label><strong>{{studentInfo.name}} {{studentInfo.surname}}</strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="mr-2">E-Mail :</label><strong>{{studentInfo.email}}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-md-3 text-right">
+                            <label for="">Username</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input [(ngModel)]="username" name="username" type="text" required class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col-md-3 text-right">
+                            <label for="">Password</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input [(ngModel)]="password" name="password" type="password" required class="form-control"/>
+                        </div>
+                    </div>     
+                    <div class="row justify-content-md-end my-4">
+                        <div class="col-md-auto">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="alert alert-danger text-danger h5 my-3" role="alert" *ngIf="errorMsg">
+                    {{errorMsg}}
+                </div>    
+            </div>
+        </div>
+        <div class="row justify-content-md-end my-1">
+            <div class="col-md-auto">
+                Already registered? <a href="/login">Login</a>
+            </div>
+        </div>
+    </div>
+</div>

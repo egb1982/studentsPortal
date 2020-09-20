@@ -1,0 +1,18 @@
+<h1>STUDENTS PORTAL DASHBOARD</h1>
+<hr style="border:2px solid red;">
+<div class="row mt-5">
+    <div class="col-md-3">
+        <div class="list-group" *ngIf="isAdmin">
+            <button type="button" class="list-group-item list-group-item-action active">Noticeboard</button>
+            <button type="button" class="list-group-item list-group-item-action">Students Management</button>
+            <button type="button" class="list-group-item list-group-item-action">Posts Management</button>
+            <button type="button" class="list-group-item list-group-item-action">Logout</button>
+          </div>
+          <div class="list-group" *ngIf="!isAdmin">
+            <button type="button" class="list-group-item list-group-item-action active">Noticeboard</button>
+            <button type="button" class="list-group-item list-group-item-action">Profile Management</button>
+            <button type="button" class="list-group-item list-group-item-action">Logout</button>
+          </div>          
+    </div>
+    <div class="col-md-9"></div>
+</div>

@@ -1,0 +1,38 @@
+<h1>STUDENTS PORTAL LOGIN</h1>
+<div class="row justify-content-md-center">
+    <div class="col-md-6">
+        <form #form="ngForm" (submit)="login(form)">
+            <div class="card mt-5">
+                <div class="card-header">Login</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 text-right">
+                            <label for="">Username</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input [(ngModel)]="username" name="username" type="text" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col-md-3 text-right">
+                            <label for="">Password</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input [(ngModel)]="password" name="password" type="password" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row justify-content-md-end my-4">
+                        <div class="col-md-auto">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row justify-content-md-end my-1">
+            <div class="col-md-auto">
+                Not registered yet? <a href="/register">Register</a>
+            </div>
+        </div>
+    </div>
+</div>
