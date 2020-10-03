@@ -13,7 +13,8 @@ export class LoginComponent implements OnInit {
 
   username:string = "";
   password:string = "";
-
+  errorMsg:string = "";
+  
   constructor(private route:ActivatedRoute, private authService: AuthenticationService, private router: Router ) { }
 
   ngOnInit(): void {
@@ -21,6 +22,10 @@ export class LoginComponent implements OnInit {
 
   login(form: NgForm):void {
     this.authService.LoginUser(form.value)
-      .subscribe((res) => { this.router.navigate(['/dashboard']) });
+        .subscribe(
+          (res) => { localStorage.setItem('TOKEN_NUMBER',res['token']),
+                    this.router.navigate(['/dashboard']) },
+          (err) => { this.errorMsg = err.error.msg, console.log(err) }
+        );
   }
 }

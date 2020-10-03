@@ -1,0 +1,78 @@
+<h1>STUDENTS PORTAL</h1>
+<hr style="border:2px solid green;">
+<h3 class="text-right">{{route.toUpperCase()}}</h3>
+<div class="row mt-5">
+    <div class="col-md-3">
+      <app-menu #menu></app-menu>
+    </div>
+    <div class="col-md-9">
+        <div class="card bg-light">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col"><strong>Student profile</strong></div>
+                    <div class="col text-right">#{{menu.studentInfo.student_id}}</div></div>
+                </div>
+            <div class="card-body">
+                <h5 class="card-title">Update profile</h5>
+                <form #form="ngForm" (submit)="updateStudentData(form)">
+                    <div class="row my-2">
+                        <div class="col-12">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name" class="form-control" placeholder="name">
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-12">
+                            <label for="surname">Surname</label>
+                            <input type="text" name="surname" id="surname" class="form-control" placeholder="surname">
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-12">
+                            <label for="email">E-Mail</label>
+                            <input type="email" name="email" id="email" class="form-control" placeholder="email">
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-auto ml-auto">
+                            <button type="submit" class="btn btn-success">Update</button>
+                        </div>
+                    </div> 
+                </form>
+                <hr>
+                <h5 class="card-title">Change password</h5>
+                <form #form="ngForm" (submit)="changePassword(form)">
+                    <div class="row my-2">
+                        <div class="col-12">
+                            <label for="password">Current password</label>
+                            <input type="password" name="password" id="password" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-12">
+                            <label for="newPassword">New password</label>
+                            <input type="password" name="newPassword" id="newPassword" class="form-control" autocomplete="new-password">
+                        </div>
+                    </div>        
+                    <div class="row my-2">
+                        <div class="col-auto ml-auto">
+                            <button type="submit" class="btn btn-secondary">reset password</button>
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary">change password</button>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+                <h5 class="card-title">Request the leave to the Portal Asministrator</h5>
+                <p class="text-success" *ngIf="menu.studentInfo.leave">Your leave request is beeing evaluated.</p>
+                <p class="text-danger">If the administrator accepts the leave your User and Student information will be deleted.</p>
+                <div class="row my-2">
+                    <div class="col-auto ml-auto">
+                        <button type="button" class="btn btn-danger" [disabled]="menu.studentInfo.leave" (click)="requestLeave(menu.studentInfo.student_id)" >Request leave</button>
+                    </div>
+                </div>    
+            </div>    
+        </div>
+    </div>    
+</div>

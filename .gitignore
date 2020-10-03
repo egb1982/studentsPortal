@@ -135,3 +135,16 @@ dist
 .tern-port
 
 start_db.bat
+database/collection-0-1217526630588162047.wt
+database/index-1-1217526630588162047.wt
+database/mongod.lock
+database/sizeStorer.wt
+database/WiredTiger.wt
+database/journal/WiredTigerLog.0000000004
+database/journal/WiredTigerLog.0000000005
+database/journal/WiredTigerPreplog.0000000001
+database/journal/WiredTigerPreplog.0000000002
+database/diagnostic.data/metrics.2020-09-29T16-03-21Z-00000
+database/diagnostic.data/metrics.interim
+database/storage.bson
+database/WiredTiger

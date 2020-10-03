@@ -11,6 +11,9 @@ app.use('/api/auth',AuthController);
 const AdminController = require('./api/admin/adminController');
 app.use('/api/admin',AdminController);
 
+const StudentController = require('./api/student/studentController');
+app.use('/api/student',StudentController);
+
 const PORT = process.env.PORT || 8080;
 
 const server = app.listen(PORT, (req,res) => {

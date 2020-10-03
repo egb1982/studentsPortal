@@ -6,9 +6,7 @@ const nodemailer = require('nodemailer');
 router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
 
-const User = require('../../schemas/User');
-const Student = require('../../schemas/Student');
-const Post = require('../../schemas/Post');
+const db = require('../../schemas');
 const { PassThrough } = require('nodemailer/lib/xoauth2');
 
 let transport = nodemailer.createTransport({
@@ -52,18 +50,25 @@ sendRegisterMessage = (email, name, surname, studentId) => {
 
 // GET ALL OR SPECIFIC STUDENT
 router.get('/students/:id?',(req,res) => {
-    const filter = (req.params.id !== undefined) ? {student_id : req.params.id}:{};
 
-    Student.find(filter, (err,students) => {
-        if (err) return res.status(500).send('Error getting the Student(s)');
-        res.status(200).send(students);
-    });  
+    if (req.params.id !== undefined) {
+        db.Student.find({'student_id': req.params.id}, (err,students) => {
+            if (err) return res.status(500).send('Error getting the Student');
+            res.status(200).send(students);
+        });
+    } else {
+        const query = {'$lookup':{from: 'users',localField: 'student_id',foreignField: 'student_id',as: 'user'}};    
+        db.Student.aggregate([query],(err,students) => {
+            if (err) return res.status(500).send('Error getting the Students');
+            res.status(200).send(students);
+        });
+    }    
 });
 
 // ENROL A NEW STUDENT
 router.post('/createStudent', (req,res) => {
 
-    Student.create({student_id: req.body.studentId,
+    db.Student.create({student_id: req.body.studentId,
                     name : req.body.name,
                     surname : req.body.surname,
                     email : req.body.email,
@@ -76,7 +81,7 @@ router.post('/createStudent', (req,res) => {
 
 // BLOCK STUDENT ACCESS TO THE PORTAL
 router.put('/blockUser/:id',(req,res) => {
-    User.findOneAndUpdate({student_id:req.params.id},{isBlocked:true},(err,user) => {
+    db.User.findOneAndUpdate({student_id:req.params.id},{isBlocked:true},(err,user) => {
         if (err) return res.status(500).send('Error blocking user');
         res.status(200).send(user);
     });
@@ -84,7 +89,7 @@ router.put('/blockUser/:id',(req,res) => {
 
 // BLOCK STUDENT ACCESS TO THE PORTAL
 router.put('/unblockUser/:id',(req,res) => {
-    User.findOneAndUpdate({student_id:req.params.id},{isBlocked:false},(err,user) => {
+    db.User.findOneAndUpdate({student_id:req.params.id},{isBlocked:false},(err,user) => {
         if (err) return res.status(500).send('Error unblocking user');
         res.status(200).send(user);
     });
@@ -92,9 +97,9 @@ router.put('/unblockUser/:id',(req,res) => {
 
 // DELETE STUDENT AND USER
 router.delete('acceptLeave/:id',(req,res) => {
-    Student.findOneAndDelete({student_id:req.params.id},(err,student) => {
+    db.Student.findOneAndDelete({student_id:req.params.id},(err,student) => {
         if (err) return res.status(500).send('Error deleting Student');
-        User.findOneAndDelete({student_id:req.params.id},(err,user) => {
+        db.User.findOneAndDelete({student_id:req.params.id},(err,user) => {
             res.status(204).send("student removed");
         });
     });

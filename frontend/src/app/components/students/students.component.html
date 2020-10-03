@@ -1,0 +1,49 @@
+<h1>STUDENTS PORTAL</h1>
+<hr style="border:2px solid black;">
+<h3 class="text-right">{{route.toUpperCase()}}</h3>
+<div class="row mt-5">
+    <div class="col-md-3">
+      <app-menu #menu></app-menu>
+    </div>
+    <div class="col-md-9">
+        <div class="card bg-light">
+            <div class="card-header">
+                <strong>Students list</strong>
+            </div>
+            <div>
+                <table class="table table-hover">
+                    <thead>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Surname</th>
+                        <th>E-Mail</th>
+                        <th>Username</th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        <tr [ngClass]="student.leave ? 'table-warning' :''" *ngFor="let student of studentsInfo">
+                            <td>{{student.student_id}}</td>
+                            <td>{{student.name}}</td>
+                            <td>{{student.surname}}</td>
+                            <td>{{student.email}}</td>
+                            <td *ngIf="student.user[0]">{{student.user[0].username}}</td><td class="text-danger" *ngIf="!student.user[0]">[No User]</td>
+                            <td>
+                                <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown" *ngIf="student.user[0]">
+                                    <button class="btn btn-outline-primary mr-2" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()">Actions</button>
+                                    <div ngbDropdownMenu aria-labelledby="dropdownManual">
+                                        <button ngbDropdownItem *ngIf="student.leave">Accept leave</button>
+                                        <button ngbDropdownItem *ngIf="!student.user[0].blocked">Block user</button>
+                                        <button ngbDropdownItem *ngIf="student.user[0].blocked">Unblock user</button>
+                                        <button ngbDropdownItem>Reset password</button>
+                                        <button ngbDropdownItem>Change password</button>
+                                    </div>
+                                </div>
+                                <div *ngIf="!student.user[0] && student.leave"><button class="btn btn-danger">Accept leave</button></div> 
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

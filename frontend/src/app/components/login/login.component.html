@@ -29,6 +29,9 @@
                 </div>
             </div>
         </form>
+        <div class="alert alert-danger text-danger h5 my-3" role="alert" *ngIf="errorMsg">
+            {{errorMsg}}
+        </div>  
         <div class="row justify-content-md-end my-1">
             <div class="col-md-auto">
                 Not registered yet? <a href="/register">Register</a>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,11 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  isAdmin = true;
+  route:string = "";
+  isAdmin= true;
 
-  constructor() { }
+  constructor( private router: Router) { }
 
   ngOnInit(): void {
+    this.route = this.router.url.substr(1);;
   }
-
 }

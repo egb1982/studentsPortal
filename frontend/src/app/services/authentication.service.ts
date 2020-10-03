@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { StudentInfo } from '../studentInfo.model';
+
 
 export interface Login {
   username: string,
@@ -27,5 +29,10 @@ export class AuthenticationService {
 
   GetRegisterStudent(id: number): Observable<any> {
     return this.http.get<any>(this.apiUrl + 'register/' + id);
+  }
+
+  GetStudentDetails(token): Observable<StudentInfo> {
+    localStorage.setItem('TOKEN_NUMBER', token);
+    return this.http.get<StudentInfo>(this.apiUrl + 'studentDetails',{headers:{'x-access-token': token}} );
   }
 }
