@@ -135,6 +135,7 @@ dist
 .tern-port
 
 start_db.bat
+database/
 database/collection-0-1217526630588162047.wt
 database/index-1-1217526630588162047.wt
 database/mongod.lock
@@ -148,3 +149,29 @@ database/diagnostic.data/metrics.2020-09-29T16-03-21Z-00000
 database/diagnostic.data/metrics.interim
 database/storage.bson
 database/WiredTiger
+database/_mdb_catalog.wt
+database/collection-0--3358370622167974109.wt
+database/collection-0-861359613568737828.wt
+database/collection-0-1217526630588162047.wt
+database/collection-2--3358370622167974109.wt
+database/collection-2-1217526630588162047.wt
+database/collection-3-861359613568737828.wt
+database/index-1--3358370622167974109.wt
+database/index-1-861359613568737828.wt
+database/index-1-1217526630588162047.wt
+database/index-2-861359613568737828.wt
+database/index-3--3358370622167974109.wt
+database/index-3-1217526630588162047.wt
+database/index-4--3358370622167974109.wt
+database/index-4-861359613568737828.wt
+database/index-5-861359613568737828.wt
+database/mongod.lock
+database/sizeStorer.wt
+database/WiredTiger.lock
+database/WiredTiger.turtle
+database/WiredTiger.wt
+database/diagnostic.data/metrics.2020-09-12T14-07-33Z-00000
+database/diagnostic.data/metrics.2020-10-03T16-31-30Z-00000
+database/journal/WiredTigerLog.0000000001
+database/journal/WiredTigerPreplog.0000000005
+database/journal/WiredTigerPreplog.0000000006
