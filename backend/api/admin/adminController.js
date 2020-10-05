@@ -87,7 +87,7 @@ router.put('/blockUser/:id',(req,res) => {
     });
 });
 
-// BLOCK STUDENT ACCESS TO THE PORTAL
+// UNBLOCK STUDENT ACCESS TO THE PORTAL
 router.put('/unblockUser/:id',(req,res) => {
     db.User.findOneAndUpdate({student_id:req.params.id},{isBlocked:false},(err,user) => {
         if (err) return res.status(500).send('Error unblocking user');

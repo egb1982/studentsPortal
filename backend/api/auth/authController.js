@@ -10,7 +10,7 @@ router.use(bodyParser.json());
 
 const db = require('../../schemas');
 const SALT_WF = 10;
-/* For Creating the Admin first time
+/* For Creating the Admin first time */
 router.post('/createAdminUser',(req,res) => {
     const hashedPassword = bcrypt.hashSync(config.adminPwd,SALT_WF);
     db.User.create({
@@ -27,7 +27,7 @@ router.post('/createAdminUser',(req,res) => {
         res.setHeader('Access-Control-Allow-Headers','Origin, x-Requested-with,content-Type,Accept');
         res.status(201).send(user);
     });
-});*/
+});
 
 router.get('/register/:stid', (req, res) => {
     let studentId = req.params.stid;
