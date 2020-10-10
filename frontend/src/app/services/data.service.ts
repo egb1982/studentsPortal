@@ -20,4 +20,8 @@ export class DataService {
   RequestLeave(stdid: number): Observable<boolean> {
     return this.http.put<boolean>(this.apiStudentUrl + 'requestLeave/'+ stdid,true);
   }
+
+  CreateStudent(student: StudentInfo): Observable<StudentInfo> {
+    return this.http.post<StudentInfo>(this.apiAdminUrl + 'createStudent',student);
+  }
 }
