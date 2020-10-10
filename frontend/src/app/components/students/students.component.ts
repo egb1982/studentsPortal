@@ -33,9 +33,25 @@ export class StudentsComponent implements OnInit {
     this.dataService.CreateStudent(form.value)
       .subscribe((res) => { 
         this.newStudent = res 
-        this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; }
-        this.router.navigate(['students']);
+        this.reloadPage();
       },
       (err) => console.log(err))
+  }
+
+  blockUser(stdId){
+    console.log(stdId);
+    this.dataService.BlockingUser(stdId,true)
+      .subscribe((res) => {console.log(res), this.reloadPage()},
+          (err) => console.log(err));
+  }
+  unblockUser(stdId){
+    this.dataService.BlockingUser(stdId,false)
+      .subscribe((res) => {console.log(res), this.reloadPage()},
+        (err) => console.log(err));
+  }
+
+  reloadPage() {
+    this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; }
+    this.router.navigate(['students']);
   }
 }

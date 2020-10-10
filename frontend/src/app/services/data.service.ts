@@ -24,4 +24,10 @@ export class DataService {
   CreateStudent(student: StudentInfo): Observable<StudentInfo> {
     return this.http.post<StudentInfo>(this.apiAdminUrl + 'createStudent',student);
   }
+
+  BlockingUser(stdId:number, block:boolean): Observable<any> {
+    const url = this.apiAdminUrl + ((block) ? 'blockUser/' : 'unblockUser/' ) + stdId; 
+    return this.http.put<any>(url,block);
+    
+  }
 }
