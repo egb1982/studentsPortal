@@ -37,16 +37,22 @@ sendRegisterMessage = (email, name, surname, studentId) => {
     });
 }
 
-// router.get('/registerEmail',(err,res) => {
-//     const message = {from: 'admin@university.com',
-//     to: 'egb@students.es',
-//     subject: 'You are enrolled successfully',
-//     html: '<h1> Welcome to the University </h1>'}
-//     transport.sendMail(message,(err,info) => {
-//         if (err) { console.log(err) } 
-//         else { console.log(info); }
-//     });
-// });
+router.post('/registerEmail',(req,res) => {
+    const message = {from: 'admin@university.com',
+    to: req.body.email,
+    subject: 'You are enrolled successfully',
+    html: '<h1> Welcome to the University </h1>'
+    +'<p> Dear ' + req.body.name + ' ' + req.body.surname +'. <br>'
+    +'Your applycation has been accepted and you have been enrolled to our university. <br>'
+    +'To access to the Univesity\'s Portal, you have to <a href="http://localhost:4200/register/'+req.body.student_id+'">follow this link</a> and register.<br>'
+    +'You will need your <b>student id</b> to acomnplish the registration process, which is: <h4>' + req.body.student_id +'</h4><br>'
+    +'Best regards, <br> The Administration.</p>'
+    }
+    transport.sendMail(message,(err,info) => {
+        if (err) return res.status(500).send('Error sending e-Mail'); 
+        res.status(200).send(info);
+    });
+});
 
 // GET ALL OR SPECIFIC STUDENT
 router.get('/students/:id?',(req,res) => {
@@ -100,9 +106,11 @@ router.delete('acceptLeave/:id',(req,res) => {
     db.Student.findOneAndDelete({student_id:req.params.id},(err,student) => {
         if (err) return res.status(500).send('Error deleting Student');
         db.User.findOneAndDelete({student_id:req.params.id},(err,user) => {
+            if (err) return res.status(500).send('Error deleting User');
             res.status(204).send("student removed");
         });
     });
 });
+
 
 module.exports = router;

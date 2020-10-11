@@ -54,4 +54,9 @@ export class StudentsComponent implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; }
     this.router.navigate(['students']);
   }
+
+  sendRegisterEmail(student: StudentInfo) {   
+    this.dataService.SendRegisterEmail(student)
+    .subscribe((res) => console.log(res))
+  }
 }

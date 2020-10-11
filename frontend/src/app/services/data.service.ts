@@ -30,4 +30,8 @@ export class DataService {
     return this.http.put<any>(url,block);
     
   }
+
+  SendRegisterEmail(student:StudentInfo): Observable<StudentInfo> {
+    return this.http.post<StudentInfo>(this.apiAdminUrl +'registerEmail',student);
+  }
 }

@@ -4,12 +4,45 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('../../config');
+const nodemailer = require('nodemailer');
 
 router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
 
 const db = require('../../schemas');
 const SALT_WF = 10;
+
+let transport = nodemailer.createTransport({
+    host:'smtp.mailtrap.io',
+    port:2525,
+    auth: {
+        user: '92e9d3a0689277',
+        pass: '09d938ad5632dd' 
+    }
+})
+
+resetPasswordMessage = (studentId, password) => {
+
+    db.Student.findOne({student_id:studentId},(err,student) => {
+        if (err) return res.status(500).send('Error finding student.')
+        const message = {
+            from: 'admin@university.com',
+            to: student.email,
+            subject: 'Students portal password reset',
+            html: '<h1>Your Password has ben reset</h1>'
+            +'<p> Dear ' + student.name + ' ' + student.surname +'. <br>'
+            +'Your password has been successfully changed to a random password: <br>'
+            +'<strong>'+password+'</strong> <br>'
+            +'Try to access to the Univesity\'s Portal by <a href="http://localhost:4200/login">following this link</a>.<br>'
+            +'Best regards, <br> The Administration.</p>'
+        }    
+        transport.sendMail(message, (err, info) => {
+            if (err) { console.log(err) } 
+            else { console.log(info); }
+        });
+    });
+}
+
 /* For Creating the Admin first time */
 router.post('/createAdminUser',(req,res) => {
     const hashedPassword = bcrypt.hashSync(config.adminPwd,SALT_WF);
@@ -111,6 +144,27 @@ router.get('/studentDetails',(req, res) => {
                 res.status(200).send(student);    
             });
         });
+    });
+});
+
+// RESET PASSWORD
+router.put('resetpassword/:id',(req,res) => {
+    const randomPass = Math.random().toString(36).slice(-8);
+    const hashedPassword = bcrypt.hashSync(randomPass,SALT_WF);
+    db.User.findOneAndUpdate({student_id:req.params.id},{password:hashedPassword},(err,user) => {
+        if (err) return res.status(500).send('Error reseting password');
+        resetPasswordMessage(req.params.id, randomPass);
+        res.status(200).send(user);
+    });
+});
+
+// CHANGE PASSWORD
+router.put('changePassword/:id',(req,res) => {
+    const hashedPassword = bcrypt.hashSync(req.body.password,SALT_WF);
+    const hashedNewPassword = bcrypt.hashSync(req.body.newPassword,SALT_WF);
+    db.User.findOneAndUpdate({student_id:req.params.id,password:hashedPassword},{password:hashedNewPassword},(err,user) => {
+        if (err) return res.status(500).send('Error changing password');
+        res.status(200).send(user);
     });
 });
 

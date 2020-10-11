@@ -1,6 +1,7 @@
 <h1>STUDENTS PORTAL</h1>
 <hr style="border:2px solid black;">
 <h3 class="text-right">{{route.toUpperCase()}}</h3>
+
 <div class="row mt-5">
     <div class="col-md-3">
       <app-menu #menu></app-menu>
@@ -69,6 +70,9 @@
                                         <button ngbDropdownItem>Reset password</button>
                                         <button ngbDropdownItem>Change password</button>
                                     </div>
+                                </div>
+                                <div *ngIf="!student.user[0]">
+                                    <button type="button" class="btn btn-warning" (click)=sendRegisterEmail(student)>Send E-Mail</button>
                                 </div>
                             </td>
                         </tr>
