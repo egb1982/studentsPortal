@@ -28,7 +28,6 @@ export class DataService {
   BlockingUser(stdId:number, block:boolean): Observable<any> {
     const url = this.apiAdminUrl + ((block) ? 'blockUser/' : 'unblockUser/' ) + stdId; 
     return this.http.put<any>(url,block);
-    
   }
 
   SendRegisterEmail(student:StudentInfo): Observable<StudentInfo> {

@@ -148,7 +148,7 @@ router.get('/studentDetails',(req, res) => {
 });
 
 // RESET PASSWORD
-router.put('resetpassword/:id',(req,res) => {
+router.put('/resetPassword/:id',(req,res) => {
     const randomPass = Math.random().toString(36).slice(-8);
     const hashedPassword = bcrypt.hashSync(randomPass,SALT_WF);
     db.User.findOneAndUpdate({student_id:req.params.id},{password:hashedPassword},(err,user) => {
@@ -159,10 +159,11 @@ router.put('resetpassword/:id',(req,res) => {
 });
 
 // CHANGE PASSWORD
-router.put('changePassword/:id',(req,res) => {
-    const hashedPassword = bcrypt.hashSync(req.body.password,SALT_WF);
+router.put('/changePassword/:id',(req,res) => {
+
+    console.log(req.body.newPassword);
     const hashedNewPassword = bcrypt.hashSync(req.body.newPassword,SALT_WF);
-    db.User.findOneAndUpdate({student_id:req.params.id,password:hashedPassword},{password:hashedNewPassword},(err,user) => {
+    db.User.findOneAndUpdate({student_id:req.params.id},{password:hashedNewPassword},(err,user) => {
         if (err) return res.status(500).send('Error changing password');
         res.status(200).send(user);
     });

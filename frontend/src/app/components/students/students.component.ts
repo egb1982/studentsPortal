@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import {  ActivatedRoute,Router } from '@angular/router';
+import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgForm } from "@angular/forms";
+import { AuthenticationService } from "../../services/authentication.service";
 import { DataService } from "../../services/data.service";
 import { StudentInfo } from "../../studentInfo.model";
+import { NgbModalConfig, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+
 
 @Component({
   selector: 'app-students',
   templateUrl: './students.component.html',
-  styleUrls: ['./students.component.scss']
+  styleUrls: ['./students.component.scss'],
+  providers: [NgbModalConfig, NgbModal, NgbActiveModal]
 })
 export class StudentsComponent implements OnInit {
 
@@ -15,8 +19,18 @@ export class StudentsComponent implements OnInit {
   studentsInfo:StudentInfo[];
   nextId: number = 100000;
   newStudent:StudentInfo =new StudentInfo(0,"","","",false,false);
+  sysMessage:any = {message:"", error:false};
+  selStudent: StudentInfo;
 
-  constructor(private router: Router, private dataService: DataService) { }
+  constructor(private router: Router, 
+              private dataService: DataService, 
+              private authService : AuthenticationService, 
+              config: NgbModalConfig, 
+              public modal: NgbActiveModal,
+              private modalService: NgbModal) {
+                config.backdrop = 'static';
+                config.keyboard = false;
+               }
 
   ngOnInit(): void {
     this.route = this.router.url.substr(1);
@@ -27,6 +41,11 @@ export class StudentsComponent implements OnInit {
         this.newStudent.studentId = this.nextId;
       },
       (err) => console.log(err))
+  }
+
+  openModal (content, student:StudentInfo) {
+    this.modalService.open(content)
+    this.selStudent = student;
   }
 
   createStudent(form:NgForm): void {
@@ -57,6 +76,43 @@ export class StudentsComponent implements OnInit {
 
   sendRegisterEmail(student: StudentInfo) {   
     this.dataService.SendRegisterEmail(student)
-    .subscribe((res) => console.log(res))
+    .subscribe((res) => { 
+      console.log(res);
+      this.sysMessage = {message:"The email has been sent to "+ res["accepted"] +" succesfully", error: false};
+    },
+      (err) => this.sysMessage = {message:"The send of the email has failed", error: true}
+    );
+    this.hideMessage();
+  }
+
+  resetPassword(stdId: number) {
+    this.authService.ResetPassword(stdId)
+      .subscribe((res) => { console.log(res);
+        this.sysMessage = {message:"The password has been reset succesfully and an e-Mail sent to " + res["accepted"]  , error: false};
+      },
+        (err) => this.sysMessage = {message:"The password reseting has failed", error: true}
+      );
+      this.hideMessage();
+  }
+
+  changePassword(event){
+    const newPassword = event.target.newPassword.value;
+    const studentId = event.target.studentId.value;
+    this.authService.ChangePassword(studentId,newPassword)
+      .subscribe((res) => { console.log(res);
+        this.sysMessage = {message:"The password has been changed succesfully", error: false};
+      },
+        (err) => this.sysMessage = {message:"The password change has failed", error: true}
+      );
+      this.modalService.dismissAll();
+      this.hideMessage();
+  }
+
+  hideMessage() {
+    window.scroll(0,0);
+    setTimeout(function() {
+      this.sysMessage.message = "";
+      this.sysMessage.error = false;
+    }.bind(this), 5000);
   }
 }

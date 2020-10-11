@@ -2,6 +2,30 @@
 <hr style="border:2px solid black;">
 <h3 class="text-right">{{route.toUpperCase()}}</h3>
 
+<div *ngIf="sysMessage.message" class="alert" [ngClass]="sysMessage.error ? 'alert-danger' : 'alert-success' ">
+    {{sysMessage.message}}
+</div>
+
+<ng-template #newPassModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Change password</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form (submit)="changePassword($event)">
+        <div class="modal-body">
+            <label for="newPassword">Choose the new password for the user <strong>{{ selStudent.user[0].username }}</strong></label>
+            <input type="hidden" name="studentId" value="{{selStudent.student_id}}">
+            <input #newPassword type="password" name="newPassword" class="form-control">      
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="d('cancel click')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Change</button>
+        </div>
+    </form>
+</ng-template>
+
 <div class="row mt-5">
     <div class="col-md-3">
       <app-menu #menu></app-menu>
@@ -67,8 +91,8 @@
                                         <button ngbDropdownItem *ngIf="student.leave">Reject leave</button>
                                         <button type="button" ngbDropdownItem (click)="blockUser(student.student_id)" *ngIf="!student.user[0].isBlocked">Block user</button>
                                         <button type="button" ngbDropdownItem (click)="unblockUser(student.student_id)" *ngIf="student.user[0].isBlocked">Unblock user</button>
-                                        <button ngbDropdownItem>Reset password</button>
-                                        <button ngbDropdownItem>Change password</button>
+                                        <button ngbDropdownItem (click)="resetPassword(student.student_id)" >Reset password</button>
+                                        <button ngbDropdownItem (click)="openModal(newPassModal,student)">Change password</button>
                                     </div>
                                 </div>
                                 <div *ngIf="!student.user[0]">
