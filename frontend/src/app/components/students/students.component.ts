@@ -108,11 +108,28 @@ export class StudentsComponent implements OnInit {
       this.hideMessage();
   }
 
-  hideMessage() {
+  acceptLeave(stdId){
+    this.dataService.AcceptStudentLeave(stdId)
+      .subscribe((res)=> this.sysMessage = {message:"The Student has been removed", error: false},
+      (err) => this.sysMessage = {message:"Error removing the Student", error: true}
+    );
+    this.hideMessage(true);
+  }
+
+  rejectLeave(stdId) {
+    this.dataService.RejectStudentLeave(stdId)
+    .subscribe((res)=> this.sysMessage = {message:"The Student Leave has been rejected", error: false},
+    (err) => this.sysMessage = {message:"Error rejecting the Student leave", error: true}
+    );
+    this.hideMessage(true);
+  }
+
+  hideMessage(reload:boolean = false) {
     window.scroll(0,0);
     setTimeout(function() {
       this.sysMessage.message = "";
       this.sysMessage.error = false;
+      if (reload) { this.reloadPage() }
     }.bind(this), 5000);
   }
 }

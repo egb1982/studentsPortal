@@ -33,4 +33,12 @@ export class DataService {
   SendRegisterEmail(student:StudentInfo): Observable<StudentInfo> {
     return this.http.post<StudentInfo>(this.apiAdminUrl +'registerEmail',student);
   }
+
+  AcceptStudentLeave(stdId:number): Observable<any> {
+    return this.http.delete<any>(this.apiAdminUrl + 'acceptLeave/'+ stdId);
+  }
+
+  RejectStudentLeave(stdId:number): Observable<any> {
+    return this.http.put<any>(this.apiAdminUrl + 'rejectLeave/'+ stdId,false);
+  }
 }
