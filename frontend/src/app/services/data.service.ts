@@ -20,4 +20,25 @@ export class DataService {
   RequestLeave(stdid: number): Observable<boolean> {
     return this.http.put<boolean>(this.apiStudentUrl + 'requestLeave/'+ stdid,true);
   }
+
+  CreateStudent(student: StudentInfo): Observable<StudentInfo> {
+    return this.http.post<StudentInfo>(this.apiAdminUrl + 'createStudent',student);
+  }
+
+  BlockingUser(stdId:number, block:boolean): Observable<any> {
+    const url = this.apiAdminUrl + ((block) ? 'blockUser/' : 'unblockUser/' ) + stdId; 
+    return this.http.put<any>(url,block);
+  }
+
+  SendRegisterEmail(student:StudentInfo): Observable<StudentInfo> {
+    return this.http.post<StudentInfo>(this.apiAdminUrl +'registerEmail',student);
+  }
+
+  AcceptStudentLeave(stdId:number): Observable<any> {
+    return this.http.delete<any>(this.apiAdminUrl + 'acceptLeave/'+ stdId);
+  }
+
+  RejectStudentLeave(stdId:number): Observable<any> {
+    return this.http.put<any>(this.apiAdminUrl + 'rejectLeave/'+ stdId,false);
+  }
 }

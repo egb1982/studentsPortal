@@ -35,4 +35,12 @@ export class AuthenticationService {
     localStorage.setItem('TOKEN_NUMBER', token);
     return this.http.get<StudentInfo>(this.apiUrl + 'studentDetails',{headers:{'x-access-token': token}} );
   }
+
+  ResetPassword(stdId: number): Observable<any> {
+    return this.http.put<any>(this.apiUrl + 'resetPassword/'+stdId,'');
+  }
+
+  ChangePassword(stdId: number, newPassword: string): Observable<any>{
+    return this.http.put<any>(this.apiUrl + 'changePassword/'+stdId,{newPassword:newPassword});
+  }
 }
