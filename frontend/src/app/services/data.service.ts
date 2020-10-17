@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { StudentInfo } from '../studentInfo.model';
+import { NgForm } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +41,9 @@ export class DataService {
 
   RejectStudentLeave(stdId:number): Observable<any> {
     return this.http.put<any>(this.apiAdminUrl + 'rejectLeave/'+ stdId,false);
+  }
+
+  UpdateStudentData(student:NgForm): Observable<StudentInfo> {
+    return this.http.put<StudentInfo>(this.apiStudentUrl + 'updateStudent',student);
   }
 }
