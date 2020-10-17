@@ -160,8 +160,6 @@ router.put('/resetPassword/:id',(req,res) => {
 
 // CHANGE PASSWORD
 router.put('/changePassword/:id',(req,res) => {
-
-    console.log(req.body.newPassword);
     const hashedNewPassword = bcrypt.hashSync(req.body.newPassword,SALT_WF);
     db.User.findOneAndUpdate({student_id:req.params.id},{password:hashedNewPassword},(err,user) => {
         if (err) return res.status(500).send('Error changing password');
