@@ -105,4 +105,14 @@ router.delete('acceptLeave/:id',(req,res) => {
     });
 });
 
+//PUBLISH NEW POST
+router.post('/publish',(req,res) => {
+    const docPath = req.file ? req.file.filename : "";
+    db.Post.create({type:req.body.type,title:req.body.title,content:req.body.text,docPath:docPath}
+                    ,(err,post) => {
+                        if (err) return res.status(500).send('error saving the post');
+                        res.status(201).send(post);
+                    });
+});
+
 module.exports = router;

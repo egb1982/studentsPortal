@@ -6,42 +6,61 @@
       <app-menu #menu></app-menu>
     </div>
     <div class="col-md-9">
-      <div class="card">
-        <div class="card-header">Notification</div>
+      <div class="card bg-light mb-3" *ngIf="menu.studentInfo.isAdmin">
+        <form #form="ngForm" (submit)="createPost(form)" enctype="multipart/form-data">
+          <div class="card-header"><strong>Publish new post</strong></div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-auto">
+                <select [(ngModel)]="type" name="type" id="type" class="form-control my-2">
+                  <option value='notif' class="bg-info text-white">Notification</option>
+                  <option value='examTT' class="bg-warning text-white">Exam time table</option>
+                  <option value='examGP' class="bg-danger text-white">Exam gate pass</option>
+                  <option value='change' class="bg-secondary text-white">Change in faculty</option>
+                  <option value='circ' class="bg-success text-white">Circular on the portal</option>
+                </select>    
+              </div>
+            </div>
+            <div class="row" *ngIf="type === 'examGP' || type ==='examTT'">
+              <div class="col-12">
+                <input #document type="file" name="document" id="document" class="form-control-file" (change)="processFile(document)">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <input [(ngModel)]="title" type="text" name="title" id="title" class="form-control my-2" placeholder="title">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <textarea [(ngModel)]="text" name="text" id="text" cols="30" rows="5" class="form-control my-2"></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-auto ml-auto">
+                <button type="submit" value="send" class="btn btn-primary my-2">Publish</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="card" *ngIf="!posts">
+        <div class="card-header bg-info text-white"><strong>Notification</strong></div>
         <div class="card-body">
           <h5 class="card-title">There are no posts</h5>
           <p class="card-text">The administrator has not created any content yet. As soon as some content is added you will see it here.</p>
         </div>
       </div>
-      <div class="card text-white bg-secondary mt-5" *ngIf="menu.studentInfo.isAdmin">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-auto">
-              <select name="type" id="type" class="form-control my-2">
-                <option value=1>Notification</option>
-                <option value=2>Exam time table</option>
-                <option value=3>Exam gate pass</option>
-                <option value=4>Change in faculty</option>
-                <option value=5>Circular on the portal</option>
-              </select>    
-            </div>
+      <div *ngIf="posts">
+        <div class="card mb-3" *ngFor="let post of posts">
+          <div class="card-header {{getTitleCssClass(post.type)}} text-white"><strong>{{getTitle(post.type)}}</strong></div>
+          <div class="card-body">
+            <h5 class="card-title">{{post.title}}</h5>
+            <p class="card-text">{{post.content}}</p>
+            <!--<button type="button" (click)="downloadFile(post.docPath)" target="_blank" *ngIf="post.docPath" class="btn btn-success btn-lg btn-block">download</button>-->
+            <a href="http://localhost:8080/download/{{post.docPath}}" target="_blank" *ngIf="post.docPath" class="btn btn-success btn-lg btn-block">download</a>
           </div>
-          <div class="row">
-            <div class="col-12">
-              <input type="text" name="title" id="title" class="form-control my-2" placeholder="title">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <textarea name="text" id="text" cols="30" rows="10" class="form-control my-2"></textarea>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-auto ml-auto">
-              <button type="button" value="send" class="btn btn-danger my-2">Publish</button>
-            </div>
-          </div>
-        </div>
+        </div>  
       </div>
     </div>    
 </div>

@@ -29,7 +29,7 @@
                             <td *ngIf="student.user[0]">{{student.user[0].username}}</td><td class="text-danger" *ngIf="!student.user[0]">[No User]</td>
                             <td>
                                 <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown" *ngIf="student.user[0]">
-                                    <button class="btn btn-outline-primary mr-2" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()">Actions</button>
+                                    <button class="btn btn-primary mr-2" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()">Actions</button>
                                     <div ngbDropdownMenu aria-labelledby="dropdownManual">
                                         <button ngbDropdownItem *ngIf="student.leave">Accept leave</button>
                                         <button ngbDropdownItem *ngIf="!student.user[0].blocked">Block user</button>
