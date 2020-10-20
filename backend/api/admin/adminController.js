@@ -9,6 +9,8 @@ router.use(bodyParser.json());
 const db = require('../../schemas');
 const { PassThrough } = require('nodemailer/lib/xoauth2');
 
+const _SENDER = 'admin@university.com';
+
 let transport = nodemailer.createTransport({
     host:'smtp.mailtrap.io',
     port:2525,
@@ -20,7 +22,7 @@ let transport = nodemailer.createTransport({
 
 sendRegisterMessage = (email, name, surname, studentId) => {
     const message = {
-        from: 'admin@university.com',
+        from: _SENDER,
         to: email,
         subject: 'You are enrolled successfully',
         html: '<h1> Welcome to the University </h1>'
@@ -30,23 +32,61 @@ sendRegisterMessage = (email, name, surname, studentId) => {
         +'You will need your <b>student id</b> to acomnplish the registration process, which is: <h4>' + studentId +'</h4><br>'
         +'Best regards, <br> The Administration.</p>'
     }    
+    sendMail(message);
+}
 
+sendAcceptedLeaveMail = (student) => {
+    const message = {
+        from: _SENDER,
+        to:student.email,
+        subject:"Your leave request has been ACCEPTED",
+        html:'<h1> Notification of leave accepted </h1>'
+        +'<p> Dear ' + student.name + ' ' + student.surname +'. <br>'
+        +'Your request has been <strong>ACCEPTED</strong>. <br>'
+        +'Your access to the University\'s Portal and all your data has been removed. <br>'
+        +'Best regards, <br> The Administration.</p>'
+    }
+    sendMail(message);
+}
+
+sendRejectedLeaveMail = (student) => {
+    const message = {
+        from: _SENDER,
+        to:student.email,
+        subject:"Your leave request has been REJECTED",
+        html:'<h1> Notification of leave rejected </h1>'
+        +'<p> Dear ' + student.name + ' ' + student.surname +'. <br>'
+        +'Your request to leave has been rejected. <br>'
+        +'Please, contact with the university\'s Administration to know the reasons. <br>'
+        +'You still have plain access to your account. <br>'
+        +'Best regards, <br> The Administration.</p>'
+    }
+    sendMail(message);
+}
+
+sendMail = (message) => {
     transport.sendMail(message, (err, info) => {
         if (err) { console.log(err) } 
         else { console.log(info); }
     });
 }
 
-// router.get('/registerEmail',(err,res) => {
-//     const message = {from: 'admin@university.com',
-//     to: 'egb@students.es',
-//     subject: 'You are enrolled successfully',
-//     html: '<h1> Welcome to the University </h1>'}
-//     transport.sendMail(message,(err,info) => {
-//         if (err) { console.log(err) } 
-//         else { console.log(info); }
-//     });
-// });
+router.post('/registerEmail',(req,res) => {
+    const message = {from: _SENDER,
+    to: req.body.email,
+    subject: 'You are enrolled successfully',
+    html: '<h1> Welcome to the University </h1>'
+    +'<p> Dear ' + req.body.name + ' ' + req.body.surname +'. <br>'
+    +'Your applycation has been accepted and you have been enrolled to our university. <br>'
+    +'To access to the Univesity\'s Portal, you have to <a href="http://localhost:4200/register/'+req.body.student_id+'">follow this link</a> and register.<br>'
+    +'You will need your <b>student id</b> to acomnplish the registration process, which is: <h4>' + req.body.student_id +'</h4><br>'
+    +'Best regards, <br> The Administration.</p>'
+    }
+    transport.sendMail(message,(err,info) => {
+        if (err) return res.status(500).send('Error sending e-Mail'); 
+        res.status(200).send(info);
+    });
+});
 
 // GET ALL OR SPECIFIC STUDENT
 router.get('/students/:id?',(req,res) => {
@@ -96,13 +136,24 @@ router.put('/unblockUser/:id',(req,res) => {
 });
 
 // DELETE STUDENT AND USER
-router.delete('acceptLeave/:id',(req,res) => {
+router.delete('/acceptLeave/:id',(req,res) => {
     db.Student.findOneAndDelete({student_id:req.params.id},(err,student) => {
         if (err) return res.status(500).send('Error deleting Student');
         db.User.findOneAndDelete({student_id:req.params.id},(err,user) => {
+            if (err) return res.status(500).send('Error deleting User');
             res.status(204).send("student removed");
+            sendAcceptedLeaveMail(student);
         });
     });
+});
+
+// REJECT STUDENT LEAVE
+router.put('/rejectLeave/:id',(req,res) => {
+    db.Student.findOneAndUpdate({student_id:req.params.id},{leave: false},(err,student) => {
+        if (err) return res.status(500).send('Error Updating leave field of Student');
+        res.status(200).send(student);
+        sendRejectedLeaveMail(student);
+    })
 });
 
 //PUBLISH NEW POST

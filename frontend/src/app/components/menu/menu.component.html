@@ -1,12 +1,12 @@
 <div class="list-group" *ngIf="studentInfo.isAdmin">
   <button  (click)="noticeboard()" type="button" class="list-group-item list-group-item-action list-group-item-dark" [ngClass]="route === 'dashboard' ? 'active' : ''">Dashboard</button>
   <button (click)="students()" type="button" class="list-group-item list-group-item-action list-group-item-dark" [ngClass]="route === 'students' ? 'active' : ''">Students Management</button>    
-  <button (click)="logout()" type="button" class="list-group-item list-group-item-action list-group-item-dark" [ngClass]="route === 'logout' ? 'active' : ''">Logout</button>
+  <button (click)="logout()" type="button" class="list-group-item list-group-item-action list-group-item-dark text-danger" [ngClass]="route === 'logout' ? 'active' : ''">Logout</button>
 </div>
 <div class="list-group" *ngIf="!studentInfo.isAdmin">
   <button  (click)="noticeboard()" type="button" class="list-group-item list-group-item-action" [ngClass]="route === 'dashboard' ? 'active' : ''">Dashboard</button>
   <button (click)="profile()" type="button" class="list-group-item list-group-item-action" [ngClass]="route === 'profile' ? 'active' : ''">Profile Management</button>
-  <button (click)="logout()" type="button" class="list-group-item list-group-item-action" [ngClass]="route === 'logout' ? 'active' : ''">Logout</button>
+  <button (click)="logout()" type="button" class="list-group-item list-group-item-action text-danger" [ngClass]="route === 'logout' ? 'active' : ''">Logout</button>
 </div>
 
 <div class="card bg-light mt-5" *ngIf="!studentInfo.isAdmin">

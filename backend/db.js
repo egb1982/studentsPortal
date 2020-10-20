@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var dbURI = 'mongodb://localhost:5000/studentportal';
-mongoose.connect(dbURI);
+mongoose.connect(dbURI,{ useNewUrlParser: true , useUnifiedTopology: true});
 
 mongoose.connection.on('connected', function () {
     console.log(' --||-- Mongoose connected to ' + dbURI);

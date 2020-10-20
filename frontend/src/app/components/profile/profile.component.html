@@ -1,6 +1,11 @@
 <h1>STUDENTS PORTAL</h1>
 <hr style="border:2px solid green;">
 <h3 class="text-right">{{route.toUpperCase()}}</h3>
+
+<div *ngIf="sysMessage.message" class="alert" [ngClass]="sysMessage.error ? 'alert-danger' : 'alert-success' ">
+    {{sysMessage.message}}
+</div>
+
 <div class="row mt-5">
     <div class="col-md-3">
       <app-menu #menu></app-menu>
@@ -15,22 +20,23 @@
             <div class="card-body">
                 <h5 class="card-title">Update profile</h5>
                 <form #form="ngForm" (submit)="updateStudentData(form)">
+                    <input type="hidden" name="student_id" [(ngModel)]="menu.studentInfo.student_id" >
                     <div class="row my-2">
                         <div class="col-12">
                             <label for="name">Name</label>
-                            <input type="text" name="name" id="name" class="form-control" placeholder="name">
+                            <input [(ngModel)]="menu.studentInfo.name" type="text" name="name" id="name" class="form-control" placeholder="name">
                         </div>
                     </div>
                     <div class="row my-2">
                         <div class="col-12">
                             <label for="surname">Surname</label>
-                            <input type="text" name="surname" id="surname" class="form-control" placeholder="surname">
+                            <input [(ngModel)]="menu.studentInfo.surname" type="text" name="surname" id="surname" class="form-control" placeholder="surname">
                         </div>
                     </div>
                     <div class="row my-2">
                         <div class="col-12">
                             <label for="email">E-Mail</label>
-                            <input type="email" name="email" id="email" class="form-control" placeholder="email">
+                            <input [(ngModel)]="menu.studentInfo.email" type="email" name="email" id="email" class="form-control" placeholder="email">
                         </div>
                     </div>
                     <div class="row my-2">
@@ -41,22 +47,17 @@
                 </form>
                 <hr>
                 <h5 class="card-title">Change password</h5>
-                <form #form="ngForm" (submit)="changePassword(form)">
-                    <div class="row my-2">
-                        <div class="col-12">
-                            <label for="password">Current password</label>
-                            <input type="password" name="password" id="password" class="form-control">
-                        </div>
-                    </div>
+                <form (submit)="changePassword($event)">
+                    <input type="hidden" name="studentId" value="{{menu.studentInfo.student_id}}" >
                     <div class="row my-2">
                         <div class="col-12">
                             <label for="newPassword">New password</label>
-                            <input type="password" name="newPassword" id="newPassword" class="form-control" autocomplete="new-password">
+                            <input required type="password" name="newPassword" id="newPassword" class="form-control" autocomplete="new-password">
                         </div>
                     </div>        
                     <div class="row my-2">
                         <div class="col-auto ml-auto">
-                            <button type="submit" class="btn btn-secondary">reset password</button>
+                            <button type="button" class="btn btn-secondary" (click)="resetPassword(menu.studentInfo.student_id)">reset password</button>
                         </div>
                         <div class="col-auto">
                             <button type="submit" class="btn btn-primary">change password</button>
@@ -66,7 +67,7 @@
                 <hr>
                 <h5 class="card-title">Request the leave to the Portal Asministrator</h5>
                 <p class="text-success" *ngIf="menu.studentInfo.leave">Your leave request is beeing evaluated.</p>
-                <p class="text-danger">If the administrator accepts the leave your User and Student information will be deleted.</p>
+                <p class="text-info">If the administrator accepts the leave your User and Student information will be deleted.</p>
                 <div class="row my-2">
                     <div class="col-auto ml-auto">
                         <button type="button" class="btn btn-danger" [disabled]="menu.studentInfo.leave" (click)="requestLeave(menu.studentInfo.student_id)" >Request leave</button>
