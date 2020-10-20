@@ -147,12 +147,23 @@ router.delete('/acceptLeave/:id',(req,res) => {
     });
 });
 
+// REJECT STUDENT LEAVE
 router.put('/rejectLeave/:id',(req,res) => {
     db.Student.findOneAndUpdate({student_id:req.params.id},{leave: false},(err,student) => {
         if (err) return res.status(500).send('Error Updating leave field of Student');
         res.status(200).send(student);
         sendRejectedLeaveMail(student);
     })
+});
+
+//PUBLISH NEW POST
+router.post('/publish',(req,res) => {
+    const docPath = req.file ? req.file.filename : "";
+    db.Post.create({type:req.body.type,title:req.body.title,content:req.body.text,docPath:docPath}
+                    ,(err,post) => {
+                        if (err) return res.status(500).send('error saving the post');
+                        res.status(201).send(post);
+                    });
 });
 
 module.exports = router;

@@ -15,6 +15,12 @@ router.put('/requestLeave/:id',(req,res)=>{
         res.status(200).send(student);
     });
 });
+router.get('/getPosts',(req,res) => {
+    db.Post.find({},(err,posts) => {
+        if (err) return res.status(500).send('Error getting posts');
+        res.status(200).send(posts);
+    }).sort({_id:-1});
+});
 
 //UPDATE OWN DATA
 router.put('/updateStudent',(req,res)=>{
