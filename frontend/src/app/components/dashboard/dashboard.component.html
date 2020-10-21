@@ -57,8 +57,7 @@
           <div class="card-body">
             <h5 class="card-title">{{post.title}}</h5>
             <p class="card-text">{{post.content}}</p>
-            <!--<button type="button" (click)="downloadFile(post.docPath)" target="_blank" *ngIf="post.docPath" class="btn btn-success btn-lg btn-block">download</button>-->
-            <a href="http://localhost:8080/download/{{post.docPath}}" target="_blank" *ngIf="post.docPath" class="btn btn-success btn-lg btn-block">download</a>
+            <button type="button" (click)="downloadFile(post.docPath)" target="_blank" *ngIf="post.docPath" class="btn btn-success btn-lg btn-block">download</button>
           </div>
         </div>  
       </div>

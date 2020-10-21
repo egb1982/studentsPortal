@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { StudentInfo } from '../studentInfo.model';
 import { Post } from '../post.model';
 import { NgForm } from '@angular/forms';
@@ -32,7 +32,7 @@ export class DataService {
   }
 
   DownloadFile(fileName:string): Observable<any> {
-    return this.http.get<any>('http://localhost:8080/download/' + fileName);
+    return this.http.get('http://localhost:8080/download/' + fileName , { responseType: 'blob' });
   }
 
   CreateStudent(student: StudentInfo): Observable<StudentInfo> {

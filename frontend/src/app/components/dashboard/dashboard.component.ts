@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { saveAs } from 'file-saver';
 import { DataService } from 'src/app/services/data.service';
 import { Post } from '../../post.model';
+import * as fileSaver from 'file-saver';
+import {HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
@@ -55,8 +56,14 @@ export class DashboardComponent implements OnInit {
 downloadFile (filePath: string) {
   this.dataservice.DownloadFile(filePath)
   .subscribe((file) => {
-    saveAs(file,filePath);
-  });
+      console.log(file);
+			let blob:any = new Blob([file],{type: file.type});
+			const url = window.URL.createObjectURL(blob);
+			// window.open(url);
+			// window.location.href = file.url;
+		  fileSaver.saveAs(blob,filePath);
+		}), error => console.log('Error downloading the file'),
+      () => console.info('File downloaded successfully');
 }
 
   getTitle(type:string): string {
