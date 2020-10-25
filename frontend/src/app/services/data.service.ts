@@ -4,14 +4,15 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { StudentInfo } from '../studentInfo.model';
 import { Post } from '../post.model';
 import { NgForm } from '@angular/forms';
+import { environment } from "./../../environments/environment.prod";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  private apiAdminUrl = 'http://localhost:8080/api/admin/';
-  private apiStudentUrl = 'http://localhost:8080/api/student/';
+  private apiAdminUrl = environment.apiUrl + '/api/admin/';
+  private apiStudentUrl = environment.apiUrl + '/api/student/';
 
   constructor(private http: HttpClient) { }
 
@@ -32,7 +33,7 @@ export class DataService {
   }
 
   DownloadFile(fileName:string): Observable<any> {
-    return this.http.get('http://localhost:8080/download/' + fileName , { responseType: 'blob' });
+    return this.http.get(environment.apiUrl + '/download/' + fileName , { responseType: 'blob' });
   }
 
   CreateStudent(student: StudentInfo): Observable<StudentInfo> {

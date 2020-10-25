@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { StudentInfo } from '../studentInfo.model';
-
+import {environment} from './../../environments/environment.prod'
 
 export interface Login {
   username: string,
@@ -15,7 +15,7 @@ export interface Login {
 })
 export class AuthenticationService {
 
-  private apiUrl = 'http://localhost:8080/api/auth/';
+  private apiUrl = environment.apiUrl + '/api/auth/';
   
   constructor(private http: HttpClient) { }
 
