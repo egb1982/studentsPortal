@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var dbURI = 'mongodb://localhost:5000/studentportal';
+//const dbURI = 'mongodb://localhost:5000/studentportal';
+const dbURI = 'mongodb+srv://egb1982:egb1982@cluster0.xj6hy.mongodb.net/studentportal?retryWrites=true&w=majority'
 mongoose.connect(dbURI,{ useNewUrlParser: true , useUnifiedTopology: true});
 
 mongoose.connection.on('connected', function () {
