@@ -9,8 +9,6 @@ router.use(bodyParser.json());
 const db = require('../../schemas');
 const { PassThrough } = require('nodemailer/lib/xoauth2');
 
-const _SENDER = 'admin@university.com';
-
 let transport = nodemailer.createTransport({
     host:'smtp.mailtrap.io',
     port:2525,
@@ -22,13 +20,13 @@ let transport = nodemailer.createTransport({
 
 sendRegisterMessage = (email, name, surname, studentId) => {
     const message = {
-        from: _SENDER,
+        from: process.env.SENDER,
         to: email,
         subject: 'You are enrolled successfully',
         html: '<h1> Welcome to the University </h1>'
         +'<p> Dear ' + name + ' ' + surname +'. <br>'
         +'Your applycation has been accepted and you have been enrolled to our university. <br>'
-        +'To access to the Univesity\'s Portal, you have to <a href="http://localhost:4200/register/'+studentId+'">follow this link</a> and register.<br>'
+        +'To access to the Univesity\'s Portal, you have to <a href="'+ process.env.PROD_HOST +'/register/'+studentId+'">follow this link</a> and register.<br>'
         +'You will need your <b>student id</b> to acomnplish the registration process, which is: <h4>' + studentId +'</h4><br>'
         +'Best regards, <br> The Administration.</p>'
     }    
@@ -37,7 +35,7 @@ sendRegisterMessage = (email, name, surname, studentId) => {
 
 sendAcceptedLeaveMail = (student) => {
     const message = {
-        from: _SENDER,
+        from: process.env.SENDER,
         to:student.email,
         subject:"Your leave request has been ACCEPTED",
         html:'<h1> Notification of leave accepted </h1>'
@@ -51,7 +49,7 @@ sendAcceptedLeaveMail = (student) => {
 
 sendRejectedLeaveMail = (student) => {
     const message = {
-        from: _SENDER,
+        from: process.env.SENDER,
         to:student.email,
         subject:"Your leave request has been REJECTED",
         html:'<h1> Notification of leave rejected </h1>'
@@ -72,13 +70,13 @@ sendMail = (message) => {
 }
 
 router.post('/registerEmail',(req,res) => {
-    const message = {from: _SENDER,
+    const message = {from: process.env.SENDER,
     to: req.body.email,
     subject: 'You are enrolled successfully',
     html: '<h1> Welcome to the University </h1>'
     +'<p> Dear ' + req.body.name + ' ' + req.body.surname +'. <br>'
     +'Your applycation has been accepted and you have been enrolled to our university. <br>'
-    +'To access to the Univesity\'s Portal, you have to <a href="http://localhost:4200/register/'+req.body.student_id+'">follow this link</a> and register.<br>'
+    +'To access to the Univesity\'s Portal, you have to <a href="'+ process.env.PROD_HOST +'/register/'+req.body.student_id+'">follow this link</a> and register.<br>'
     +'You will need your <b>student id</b> to acomnplish the registration process, which is: <h4>' + req.body.student_id +'</h4><br>'
     +'Best regards, <br> The Administration.</p>'
     }

@@ -26,14 +26,14 @@ resetPasswordMessage = (studentId, password) => {
     db.Student.findOne({student_id:studentId},(err,student) => {
         if (err) return res.status(500).send('Error finding student.')
         const message = {
-            from: 'admin@university.com',
+            from: process.env.SENDER,
             to: student.email,
             subject: 'Students portal password reset',
             html: '<h1>Your Password has ben reset</h1>'
             +'<p> Dear ' + student.name + ' ' + student.surname +'. <br>'
             +'Your password has been successfully changed to a random password: <br>'
             +'<strong>'+password+'</strong> <br>'
-            +'Try to access to the Univesity\'s Portal by <a href="http://localhost:4200/login">following this link</a>.<br>'
+            +'Try to access to the Univesity\'s Portal by <a href="'+process.env.PROD_HOST+'/login">following this link</a>.<br>'
             +'Best regards, <br> The Administration.</p>'
         }    
         transport.sendMail(message, (err, info) => {
