@@ -63,8 +63,9 @@ router.post('/createAdminUser',(req,res) => {
 });
 
 router.get('/register/:stid', (req, res) => {
-    let studentId = req.params.stid;
-    if (studentId !== undefined) {
+    
+    if (req.params.stid !== undefined) {
+        let studentId = req.params.stid;
         db.Student.findOne({student_id:studentId},(err,student) => {
             if (err) return res.status(500).send("There was an error validating the Student ID.");
             if (!student) return res.status(404).send("Student doesn't exist.");
